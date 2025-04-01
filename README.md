@@ -1,71 +1,90 @@
-# Fermat3D Python Bindings
+# Continuous Heat Method for 3D Fermat Spirals
 
-Python bindings for the Fermat3D library, which generates continuous spiral lines on 3D meshes using the heat method.
+This repository implements a C++/Python library for computing continuous heat-based Fermat spirals on 3D surfaces. The implementation combines the continuous heat method with Fermat spiral patterns to generate evenly-spaced, direction-aware spiral patterns on arbitrary 3D meshes.
 
-## Overview
+![Fermat Spiral Example](data/fermatcpp.gif)
 
-The Python bindings expose the following functions:
+## Features
 
-- `generate_spiral(vertices, faces, source_idx=0, num_isolines=200)`: Generate a continuous spiral line from vertices and faces
-- `compute_distance_field(vertices, faces, source_idx=0)`: Compute a distance field from vertices and faces
-- `generate_isolines(vertices, faces, distance_field, num_isolines=200)`: Generate isolines from vertices, faces, and a distance field
+- Fast C++ implementation with Python bindings
+- Support for arbitrary 3D triangle meshes in .off format
+- Computation of heat-based distance fields
+- Generation of Fermat spiral patterns
+- Continuous heat method for smooth distance computation
+- Visualization support for spiral patterns
 
-## Current Implementation Status
+## Installation
 
-The Python bindings are now fully functional and use the C++ implementation to generate the spiral. The bindings are implemented using pybind11 and provide a high-level API to the Fermat3D library.
+### Requirements
+
+- C++ compiler with C++11 support
+- CMake (>= 3.1)
+- Python 3.x
+- NumPy
+- pybind11 (automatically installed via pip)
+
+### Building from Source
+
+```bash
+pip install .
+```
+
+This will:
+1. Build the C++ library using CMake
+2. Compile the Python bindings
+3. Install the package in your Python environment
 
 ## Usage
 
-Here's a simple example of how to use the Python module:
+### Python API
 
 ```python
 import numpy as np
-import os
-import sys
-import importlib.util
+from heat_fermat_3d import generate_spiral, compute_distance_field, generate_isolines
 
-# Import the C++ extension directly
-extension_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)),
-    "heat_fermat_3d.cpython-311-x86_64-linux-gnu.so",
-)
+# Load your mesh vertices and faces
+vertices = np.array(...)  # Nx3 array of vertex positions
+faces = np.array(...)     # Mx3 array of face indices
 
-# Import the C++ extension
-spec = importlib.util.spec_from_file_location("heat_fermat_3d", extension_path)
-heat_fermat_3d = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(heat_fermat_3d)
+# Generate spiral pattern
+spiral_points = generate_spiral(vertices, faces, source_idx=0, num_isolines=200)
 
-# Load vertices and faces (e.g., from an OBJ or OFF file)
-vertices = np.array([...])  # Nx3 array of vertex positions
-faces = np.array([...])     # Mx3 array of face indices
-
-# Generate the spiral
-spiral_points = heat_fermat_3d.generate_spiral(vertices, faces, source_idx=0, num_isolines=200)
-
-# Save or visualize the spiral
-# ...
+# Or compute components separately
+distance_field = compute_distance_field(vertices, faces, source_idx=0)
+spiral_points = generate_isolines(vertices, faces, distance_field, num_isolines=200)
 ```
 
-For a complete example, see the `example.py` file in the repository.
+### Example with Sample Data
 
-## Example
+```python
+import numpy as np
+import trimesh
 
-The `example.py` file demonstrates how to:
+# Load sample mesh
+mesh = trimesh.load_mesh("data/131.off")
+vertices = np.array(mesh.vertices)
+faces = np.array(mesh.faces)
 
-1. Load a mesh from an OFF file
-2. Generate a spiral using the `heat_fermat_3d` module
-3. Save the spiral to an OBJ file
-4. Visualize the mesh and spiral (if trimesh and matplotlib are available)
+# Generate spiral
+from heat_fermat_3d import generate_spiral
+spiral_points = generate_spiral(vertices, faces)
 
-To run the example:
-
-```bash
-# Run the example with the default mesh
-python example.py
-
-# Or specify a custom mesh file
-python example.py path/to/your/mesh.off
+# Visualize
+mesh.vertices = vertices
+mesh.show()
 ```
+
+## Implementation Details
+
+The library implements two main components:
+
+1. **Continuous Heat Method**: Computes smooth distance fields on meshes by solving the heat equation. This provides a robust foundation for generating evenly-spaced patterns.
+
+2. **Fermat Spiral Generation**: Uses the computed distance field to generate spiral patterns that follow the Fermat spiral equation, adapted to work on 3D surfaces.
+
+Key C++ classes:
+- `SpiralDt`: Handles distance field computation using the heat method
+- `Spirals`: Manages spiral pattern generation and isoline computation
 
 ## API Reference
 
@@ -140,3 +159,8 @@ def generate_isolines(vertices, faces, distance_field, num_isolines=200):
     numpy.ndarray
         Px3 array of points along the spiral
     """
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
