@@ -45,7 +45,8 @@ void isoline_cut(TriMesh& m, IterLine& line, Eigen::VectorXd& D, int n) {
     if (n == -1) {
         double avg_d_dis = std::accumulate(m.halfedges_begin(), m.halfedges_end(), 0.0f,
            [&](const double acc, const TriMesh::HalfedgeHandle eh){
-               return acc + abs(D((m.from_vertex_handle(eh).idx())-D((m.to_vertex_handle(eh).idx()))));
+                const double diff = D(m.from_vertex_handle(eh).idx()) - D(m.to_vertex_handle(eh).idx());
+                return acc + std::abs(diff);
            })/m.n_halfedges();
         n = (max-min)/avg_d_dis;
     }
