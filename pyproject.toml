@@ -1,0 +1,42 @@
+[build-system]
+requires = ["scikit-build-core>=0.5.0", "numpy"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "heat_fermat_3d"
+version = "0.1.0"
+description = "Python bindings for Fermat3D spiral generation"
+authors = [
+    {name = "Fermat3D Team"}
+]
+readme = "README.md"
+requires-python = ">=3.6"
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = [
+    "numpy",
+]
+
+[project.optional-dependencies]
+visualization = [
+    "trimesh",
+    "matplotlib",
+]
+
+[tool.scikit-build]
+cmake.minimum-version = "3.16"
+cmake.build-type = "Release"
+cmake.verbose = true
+wheel.packages = ["heat_fermat_3d"]
+wheel.install-dir = "heat_fermat_3d"
+
+[tool.scikit-build.cmake.define]
+BUILD_PYTHON_BINDINGS = "ON"
+BUILD_TESTING = "OFF"
