@@ -10,7 +10,6 @@
 #include <igl/grad.h>
 #include <igl/jet.h>
 #include <igl/writeDMAT.h>
-#include <igl/opengl/glfw/Viewer.h>
 
 #include <iostream>
 
@@ -84,4 +83,3 @@ void isoline_cut(TriMesh& m, IterLine& line, Eigen::VectorXd& D, int n) {
         }
     }
 }
-
