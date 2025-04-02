@@ -8,10 +8,12 @@ set(INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR} CACHE PATH "Installation directory fo
 set(INSTALL_BINDIR ${CMAKE_INSTALL_BINDIR} CACHE PATH "Installation directory for executables")
 set(INSTALL_INCLUDEDIR ${CMAKE_INSTALL_INCLUDEDIR} CACHE PATH "Installation directory for header files")
 
+# Include FetchContent module
+include(FetchContent)
+
 # Try to find system-installed dependencies first
 find_package(Eigen3 3.4 QUIET)
 if(NOT Eigen3_FOUND)
-    include(FetchContent)
     FetchContent_Declare(
         eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
