@@ -90,21 +90,14 @@ if(BUILD_PYTHON_BINDINGS)
         Eigen3::Eigen
     )
 
-    # Set the output name of the Python module to ensure it's installed with the correct name
-    set_target_properties(_heat_fermat_3d_core PROPERTIES
-        PREFIX ""
-        OUTPUT_NAME "_heat_fermat_3d_core"
-        SUFFIX ".so"
-    )
-    
     # Install Python module and its dependencies
-    install(TARGETS _heat_fermat_3d_core DESTINATION .)
+    install(TARGETS _heat_fermat_3d_core DESTINATION ${Python3_SITEARCH}/heat_fermat_3d)
     if(NOT OpenMesh_FOUND)
         # Install OpenMesh libraries
         install(TARGETS OpenMeshCore OpenMeshTools
-            RUNTIME DESTINATION .
-            LIBRARY DESTINATION .
-            ARCHIVE DESTINATION .
+            RUNTIME DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
+            LIBRARY DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
+            ARCHIVE DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
         )
         # Set RPATH for the extension module
         set_target_properties(_heat_fermat_3d_core PROPERTIES

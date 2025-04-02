@@ -13,8 +13,8 @@ for file in os.listdir(package_dir):
         extension_path = os.path.join(package_dir, file)
         break
 
-# If not found in the package directory, try to find it in site-packages
 if extension_path is None:
+    # If we're running from the source directory, try to find the module in the site-packages
     try:
         import site
 
@@ -30,7 +30,6 @@ if extension_path is None:
     except ImportError:
         pass
 
-# If still not found, raise an error
 if extension_path is None:
     raise ImportError(
         "Could not find the _heat_fermat_3d_core extension module. "
