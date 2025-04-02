@@ -34,6 +34,32 @@ This will:
 2. Compile the Python bindings
 3. Install the package in your Python environment
 
+### Installing from GitHub
+
+You can install the package directly from GitHub using pip:
+
+```bash
+pip install git+https://github.com/jselvamPX/continuousheatfermatspirals.git
+```
+
+Or add it to your project's requirements.txt or pyproject.toml:
+
+```
+heat-fermat-3d @ git+https://github.com/jselvamPX/continuousheatfermatspirals.git
+```
+
+To install a specific version or commit:
+
+```bash
+pip install git+https://github.com/jselvamPX/continuousheatfermatspirals.git@70661c08852f417fc4874f136ff090c42bb6460c
+```
+
+Or in pyproject.toml:
+
+```
+heat-fermat-3d @ git+https://github.com/jselvamPX/continuousheatfermatspirals.git@70661c08852f417fc4874f136ff090c42bb6460c
+```
+
 ## Usage
 
 ### Python API

@@ -90,10 +90,40 @@ if(BUILD_PYTHON_BINDINGS)
         Eigen3::Eigen
     )
 
+    # Set the output name of the Python module to ensure it's installed with the correct name
+    set_target_properties(_heat_fermat_3d_core PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "_heat_fermat_3d_core"
+        SUFFIX ".so"
+    )
+    
+    # Print debug information
+    message(STATUS "Python3_SITEARCH: ${Python3_SITEARCH}")
+    message(STATUS "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+    
     # Install Python module and its dependencies
-    install(TARGETS _heat_fermat_3d_core DESTINATION ${Python3_SITEARCH}/heat_fermat_3d)
+    # Install in multiple locations to increase the chances of it being found
+    install(TARGETS _heat_fermat_3d_core 
+            DESTINATION .
+            LIBRARY DESTINATION .
+            RUNTIME DESTINATION .
+            ARCHIVE DESTINATION .)
+    
+    # Also install in the Python site-packages directory
+    install(TARGETS _heat_fermat_3d_core 
+            DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
+            LIBRARY DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
+            RUNTIME DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
+            ARCHIVE DESTINATION ${Python3_SITEARCH}/heat_fermat_3d)
     if(NOT OpenMesh_FOUND)
-        # Install OpenMesh libraries
+        # Install OpenMesh libraries in multiple locations
+        install(TARGETS OpenMeshCore OpenMeshTools
+            RUNTIME DESTINATION .
+            LIBRARY DESTINATION .
+            ARCHIVE DESTINATION .
+        )
+        
+        # Also install in the Python site-packages directory
         install(TARGETS OpenMeshCore OpenMeshTools
             RUNTIME DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
             LIBRARY DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
