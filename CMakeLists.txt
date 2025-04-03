@@ -57,7 +57,7 @@ if(BUILD_PYTHON_BINDINGS)
     if(NOT Python3_NumPy_FOUND)
         message(FATAL_ERROR "NumPy not found")
     endif()
-
+    
     # pybind11
     find_package(pybind11 CONFIG QUIET)
     if(NOT pybind11_FOUND)
@@ -68,22 +68,27 @@ if(BUILD_PYTHON_BINDINGS)
         )
         FetchContent_MakeAvailable(pybind11)
     endif()
-
+    
+    # Add debug output
+    message(STATUS "Python module will be installed to: ${CMAKE_INSTALL_PREFIX}/heat_fermat_3d")
+    message(STATUS "Python site-packages: ${Python3_SITEARCH}")
+    message(STATUS "Current source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+    
     # Add Python module
     pybind11_add_module(_heat_fermat_3d_core
         heat_fermat_3d/src/heat_fermat_3d_bindings.cpp
         heat_fermat_3d/src/Spirals.cpp
         heat_fermat_3d/src/SpiralDt.cpp
     )
-
-    target_include_directories(_heat_fermat_3d_core PRIVATE 
+    
+    target_include_directories(_heat_fermat_3d_core PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/heat_fermat_3d/src
         $<$<BOOL:${OpenMesh_FOUND}>:${OpenMesh_INCLUDE_DIRS}>
         $<$<NOT:$<BOOL:${OpenMesh_FOUND}>>:${openmesh_SOURCE_DIR}/src>
         $<$<NOT:$<BOOL:${OpenMesh_FOUND}>>:${openmesh_BINARY_DIR}/src>
         ${Python3_NumPy_INCLUDE_DIRS}
     )
-
+    
     target_link_libraries(_heat_fermat_3d_core PRIVATE
         igl::core
         $<$<BOOL:${OpenMesh_FOUND}>:${OpenMesh_LIBRARIES}>
@@ -91,50 +96,26 @@ if(BUILD_PYTHON_BINDINGS)
         $<$<NOT:$<BOOL:${OpenMesh_FOUND}>>:OpenMeshTools>
         Eigen3::Eigen
     )
-
-    # Set the output name of the Python module to ensure it's installed with the correct name
+    
+    # Set the output name of the Python module
     set_target_properties(_heat_fermat_3d_core PROPERTIES
         PREFIX ""
         OUTPUT_NAME "_heat_fermat_3d_core"
-        SUFFIX ".so"
     )
     
-    # Print debug information
-    message(STATUS "Python3_SITEARCH: ${Python3_SITEARCH}")
-    message(STATUS "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+    # Set RPATH for the extension module
+    set_target_properties(_heat_fermat_3d_core PROPERTIES
+        BUILD_WITH_INSTALL_RPATH TRUE
+        INSTALL_RPATH "$ORIGIN"
+    )
     
-    # Install Python module and its dependencies
-    # Install in multiple locations to increase the chances of it being found
-    install(TARGETS _heat_fermat_3d_core 
-            DESTINATION .
-            LIBRARY DESTINATION .
-            RUNTIME DESTINATION .
-            ARCHIVE DESTINATION .)
+    # Install Python module to the correct location
+    install(TARGETS _heat_fermat_3d_core
+            LIBRARY DESTINATION heat_fermat_3d)
     
-    # Also install in the Python site-packages directory
-    install(TARGETS _heat_fermat_3d_core 
-            DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-            LIBRARY DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-            RUNTIME DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-            ARCHIVE DESTINATION ${Python3_SITEARCH}/heat_fermat_3d)
     if(NOT OpenMesh_FOUND)
-        # Install OpenMesh libraries in multiple locations
+        # Install OpenMesh libraries alongside the module
         install(TARGETS OpenMeshCore OpenMeshTools
-            RUNTIME DESTINATION .
-            LIBRARY DESTINATION .
-            ARCHIVE DESTINATION .
-        )
-        
-        # Also install in the Python site-packages directory
-        install(TARGETS OpenMeshCore OpenMeshTools
-            RUNTIME DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-            LIBRARY DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-            ARCHIVE DESTINATION ${Python3_SITEARCH}/heat_fermat_3d
-        )
-        # Set RPATH for the extension module
-        set_target_properties(_heat_fermat_3d_core PROPERTIES
-            BUILD_WITH_INSTALL_RPATH TRUE
-            INSTALL_RPATH "$ORIGIN"
-        )
+                LIBRARY DESTINATION heat_fermat_3d)
     endif()
 endif()
