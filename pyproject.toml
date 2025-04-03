@@ -39,6 +39,9 @@ wheel.expand-macos-universal-tags = false
 sdist.include = ["heat_fermat_3d/src/*.cpp", "heat_fermat_3d/src/*.h", "CMakeLists.txt"]
 wheel.license-files = ["LICENSE"]
 
+[tool.scikit-build.package-data]
+"heat_fermat_3d" = ["*.so", "*.pyd"]
+
 [tool.scikit-build.cmake.define]
 BUILD_PYTHON_BINDINGS = "ON"
 BUILD_TESTING = "OFF"
