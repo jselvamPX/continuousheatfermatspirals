@@ -51,13 +51,13 @@ heat-fermat-3d @ git+https://github.com/jselvamPX/continuousheatfermatspirals.gi
 To install a specific version or commit:
 
 ```bash
-pip install git+https://github.com/jselvamPX/continuousheatfermatspirals.git@70661c08852f417fc4874f136ff090c42bb6460c
+pip install git+https://github.com/jselvamPX/continuousheatfermatspirals.git@v0.1.0
 ```
 
 Or in pyproject.toml:
 
 ```
-heat-fermat-3d @ git+https://github.com/jselvamPX/continuousheatfermatspirals.git@70661c08852f417fc4874f136ff090c42bb6460c
+heat-fermat-3d @ git+https://github.com/jselvamPX/continuousheatfermatspirals.git@v0.1.0
 ```
 
 ## Usage
