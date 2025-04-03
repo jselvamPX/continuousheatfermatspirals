@@ -26,9 +26,9 @@ std::tuple<Eigen::MatrixXd, Eigen::MatrixXi> fv_indices(TriMesh& m) {
     return {V, F};
 }
 
-Eigen::VectorXd distance_field_from_heat(Eigen::MatrixXd& V, Eigen::MatrixXi& F, int heat_source_idx) {
+Eigen::VectorXd distance_field_from_heat(Eigen::MatrixXd& V, Eigen::MatrixXi& F, int heat_source_idx, double diffusion_time) {
     igl::HeatGeodesicsData<double> data;
-    if(!igl::heat_geodesics_precompute(V,F,0.1,data)) {
+    if(!igl::heat_geodesics_precompute(V,F,diffusion_time,data)) {
         std::cerr<<"Error: heat_geodesics_precompute failed."<<std::endl;
         exit(EXIT_FAILURE);
     };

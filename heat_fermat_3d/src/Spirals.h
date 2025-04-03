@@ -20,7 +20,7 @@ using TriMesh = OpenMesh::TriMesh_ArrayKernelT<EigenTraits>;
 
 std::tuple<Eigen::MatrixXd, Eigen::MatrixXi> fv_indices(TriMesh& m);
 
-Eigen::VectorXd distance_field_from_heat(Eigen::MatrixXd& V, Eigen::MatrixXi& F, int heat_source_idx);
+Eigen::VectorXd distance_field_from_heat(Eigen::MatrixXd& V, Eigen::MatrixXi& F, int heat_source_idx, double diffusion_time);
 
 void isoline_cut(TriMesh& m, IterLine& line, Eigen::VectorXd& D, int n = -1);
 

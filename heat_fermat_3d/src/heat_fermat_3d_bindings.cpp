@@ -43,6 +43,7 @@ py::array_t<double> generate_spiral(
     py::array_t<double> vertices_array,
     py::array_t<int> faces_array,
     int source_idx = 0,
+    double diffusion_time = 0.1,
     int num_isolines = 200
 ) {
     // Convert NumPy arrays to Eigen matrices
@@ -97,7 +98,7 @@ py::array_t<double> generate_spiral(
     }
     
     // Compute the distance field
-    Eigen::VectorXd distance_field = distance_field_from_heat(V, F, source_idx);
+    Eigen::VectorXd distance_field = distance_field_from_heat(V, F, source_idx, diffusion_time);
     
     // Generate isolines
     IterLine iter_line;
@@ -115,7 +116,8 @@ py::array_t<double> generate_spiral(
 py::array_t<double> compute_distance_field(
     py::array_t<double> vertices_array,
     py::array_t<int> faces_array,
-    int source_idx = 0
+    int source_idx = 0,
+    double diffusion_time = 0.1,
 ) {
     // Convert NumPy arrays to Eigen matrices
     py::buffer_info vertices_buf = vertices_array.request();
@@ -151,7 +153,7 @@ py::array_t<double> compute_distance_field(
     }
     
     // Compute the distance field
-    Eigen::VectorXd distance_field = distance_field_from_heat(V, F, source_idx);
+    Eigen::VectorXd distance_field = distance_field_from_heat(V, F, source_idx, diffusion_time);
     
     // Convert the distance field to a NumPy array and return it
     py::array_t<double> result(distance_field.size());
@@ -251,11 +253,11 @@ PYBIND11_MODULE(_heat_fermat_3d_core, m) {
     
     m.def("generate_spiral", &generate_spiral, 
           py::arg("vertices"), py::arg("faces"), 
-          py::arg("source_idx") = 0, py::arg("num_isolines") = 200,
+          py::arg("source_idx") = 0, py::arg("diffusion_time") = 0.1, py::arg("num_isolines") = 200,
           "Generate a continuous spiral line from vertices and faces");
     
     m.def("compute_distance_field", &compute_distance_field,
-          py::arg("vertices"), py::arg("faces"), py::arg("source_idx") = 0,
+          py::arg("vertices"), py::arg("faces"), py::arg("source_idx") = 0, py::arg("diffusion_time") = 0.1,
           "Compute a distance field from vertices and faces");
     
     m.def("generate_isolines", &generate_isolines,
