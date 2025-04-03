@@ -36,7 +36,7 @@ cmake.build-type = "Release"
 cmake.verbose = true
 wheel.packages = ["heat_fermat_3d"]
 wheel.expand-macos-universal-tags = false
-sdist.include = ["heat_fermat_3d/src/*.cpp", "heat_fermat_3d/src/*.h", "CMakeLists.txt"]
+sdist.include = ["heat_fermat_3d/src/*.cpp", "heat_fermat_3d/src/*.h", "CMakeLists.txt",  "heat_fermat_3d/*.py"]
 wheel.license-files = ["LICENSE"]
 
 [tool.scikit-build.cmake.define]
