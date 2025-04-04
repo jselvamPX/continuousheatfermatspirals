@@ -117,7 +117,7 @@ py::array_t<double> compute_distance_field(
     py::array_t<double> vertices_array,
     py::array_t<int> faces_array,
     int source_idx = 0,
-    double diffusion_time = 0.1,
+    double diffusion_time = 0.1
 ) {
     // Convert NumPy arrays to Eigen matrices
     py::buffer_info vertices_buf = vertices_array.request();
