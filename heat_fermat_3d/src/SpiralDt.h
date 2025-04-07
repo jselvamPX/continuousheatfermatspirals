@@ -76,6 +76,8 @@ struct IterLine{
     void print_fermat_spiral(std::ostream& stream, VHandle vh);
 
     std::tuple<VHandle,VHandle> spiral_from_maximum(IHandle s_ih, IHandle e_ih);
+    int get_num_points() const { return Ps.size(); }
+    const std::vector<Eigen::RowVector3d>& get_points() const { return Ps; }
  
 private:
 
